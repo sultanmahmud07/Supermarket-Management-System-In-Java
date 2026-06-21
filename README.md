@@ -59,6 +59,7 @@ CREATE TABLE `product` (
   `name` varchar(255) DEFAULT NULL,
   `category` varchar(255) DEFAULT NULL,
   `price` varchar(255) DEFAULT NULL,
+  `image_path` varchar(500) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
