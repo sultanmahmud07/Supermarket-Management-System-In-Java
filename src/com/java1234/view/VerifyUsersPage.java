@@ -65,6 +65,13 @@ public class VerifyUsersPage extends JFrame {
         // Table
         tableModel = new DefaultTableModel(new Object[]{"ID", "Name", "Email", "Mobile Number", "Address", "Security Question", "Status"}, 0);
         userTable = new JTable(tableModel);
+        userTable.setRowHeight(30);
+        userTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        userTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+        userTable.getTableHeader().setBackground(new Color(16, 185, 129));
+        userTable.getTableHeader().setForeground(Color.WHITE);
+        userTable.setSelectionBackground(new Color(16, 185, 129, 80));
+        
         JScrollPane scrollPane = new JScrollPane(userTable);
         scrollPane.setBounds(20, 130, 940, 270);
         getContentPane().add(scrollPane);

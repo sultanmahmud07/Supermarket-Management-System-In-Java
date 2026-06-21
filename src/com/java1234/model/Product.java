@@ -6,6 +6,8 @@ public class Product {
     private String category;
     private String price;
 
+    private String imagePath;
+
     public Product() {
     }
 
@@ -39,5 +41,13 @@ public class Product {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

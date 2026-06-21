@@ -180,6 +180,24 @@ public class SignupPage extends JFrame {
             return;
         }
 
+        // Email Validation
+        if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid email address!");
+            return;
+        }
+
+        // Mobile Number Validation
+        if (!mobile.matches("^\\d{10,15}$")) {
+            JOptionPane.showMessageDialog(null, "Mobile number must be digits only and 10-15 digits long!");
+            return;
+        }
+
+        // Password Validation
+        if (password.length() < 6) {
+            JOptionPane.showMessageDialog(null, "Password must be at least 6 characters long!");
+            return;
+        }
+
         User user = new User();
         user.setName(name);
         user.setEmail(email);

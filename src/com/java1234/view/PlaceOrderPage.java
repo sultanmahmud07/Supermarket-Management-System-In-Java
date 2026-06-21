@@ -50,6 +50,7 @@ public class PlaceOrderPage extends JFrame {
     private JTextField pQuantityTxt;
     private JTextField pTotalTxt;
     private JLabel lblGrandTotal;
+    private JLabel imgPreviewLbl;
 
     private DbUtil dbUtil = new DbUtil();
     private CategoryDao categoryDao = new CategoryDao();
@@ -147,6 +148,13 @@ public class PlaceOrderPage extends JFrame {
 
         productTableModel = new DefaultTableModel(new Object[]{"Name"}, 0);
         productTable = new JTable(productTableModel);
+        productTable.setRowHeight(30);
+        productTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        productTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+        productTable.getTableHeader().setBackground(new Color(16, 185, 129));
+        productTable.getTableHeader().setForeground(Color.WHITE);
+        productTable.setSelectionBackground(new Color(16, 185, 129, 80));
+
         JScrollPane scrollPane1 = new JScrollPane(productTable);
         scrollPane1.setBounds(350, 150, 250, 350);
         formPanel.add(scrollPane1);
@@ -219,6 +227,13 @@ public class PlaceOrderPage extends JFrame {
         // Cart Table
         cartTableModel = new DefaultTableModel(new Object[]{"Name", "Price", "Quantity", "Total"}, 0);
         cartTable = new JTable(cartTableModel);
+        cartTable.setRowHeight(30);
+        cartTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        cartTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+        cartTable.getTableHeader().setBackground(new Color(16, 185, 129));
+        cartTable.getTableHeader().setForeground(Color.WHITE);
+        cartTable.setSelectionBackground(new Color(16, 185, 129, 80));
+
         JScrollPane scrollPane2 = new JScrollPane(cartTable);
         scrollPane2.setBounds(650, 250, 430, 250);
         formPanel.add(scrollPane2);
@@ -238,6 +253,21 @@ public class PlaceOrderPage extends JFrame {
                 }
             }
         });
+
+        // Product Image Live Preview (Right Side)
+        JLabel lblImgPreview = new JLabel("Product Image");
+        lblImgPreview.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblImgPreview.setForeground(Color.WHITE);
+        lblImgPreview.setBounds(1110, 75, 170, 20);
+        formPanel.add(lblImgPreview);
+
+        imgPreviewLbl = new JLabel("No Image");
+        imgPreviewLbl.setFont(new Font("Tahoma", Font.ITALIC, 12));
+        imgPreviewLbl.setForeground(Color.LIGHT_GRAY);
+        imgPreviewLbl.setBounds(1110, 100, 170, 170);
+        imgPreviewLbl.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        imgPreviewLbl.setHorizontalAlignment(SwingConstants.CENTER);
+        formPanel.add(imgPreviewLbl);
 
         // Grand Total & Generate Bill
         JLabel gtLbl = new JLabel("Grand Total: $");
@@ -309,6 +339,7 @@ public class PlaceOrderPage extends JFrame {
                     pQuantityTxt.setText("1");
                     pTotalTxt.setText(p.getPrice());
                     productTotal = productPrice;
+                    displayImage(p.getImagePath());
                     break;
                 }
             }
@@ -316,6 +347,24 @@ public class PlaceOrderPage extends JFrame {
             e.printStackTrace();
         } finally {
             try { dbUtil.closeCon(con); } catch(Exception e){}
+        }
+    }
+
+    private void displayImage(String path) {
+        if (path == null || path.isEmpty()) {
+            imgPreviewLbl.setIcon(null);
+            imgPreviewLbl.setText("No Image");
+        } else {
+            java.io.File file = new java.io.File(path);
+            if (file.exists()) {
+                ImageIcon icon = new ImageIcon(path);
+                Image img = icon.getImage().getScaledInstance(170, 170, Image.SCALE_SMOOTH);
+                imgPreviewLbl.setIcon(new ImageIcon(img));
+                imgPreviewLbl.setText("");
+            } else {
+                imgPreviewLbl.setIcon(null);
+                imgPreviewLbl.setText("Not Found");
+            }
         }
     }
 
@@ -339,6 +388,8 @@ public class PlaceOrderPage extends JFrame {
         pPriceTxt.setText("");
         pQuantityTxt.setText("");
         pTotalTxt.setText("");
+        imgPreviewLbl.setIcon(null);
+        imgPreviewLbl.setText("No Image");
     }
 
     private void addToCart() {
@@ -351,6 +402,18 @@ public class PlaceOrderPage extends JFrame {
         String price = pPriceTxt.getText();
         String qty = pQuantityTxt.getText();
         String total = pTotalTxt.getText();
+
+        // Validate quantity
+        try {
+            int q = Integer.parseInt(qty);
+            if (q <= 0) {
+                JOptionPane.showMessageDialog(null, "Quantity must be a positive integer!");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Quantity must be a valid integer!");
+            return;
+        }
         
         cartTableModel.addRow(new Object[]{name, price, qty, total});
         grandTotal += Integer.parseInt(total);
@@ -365,6 +428,18 @@ public class PlaceOrderPage extends JFrame {
         
         if(name.isEmpty() || mobile.isEmpty() || email.isEmpty() || grandTotal == 0) {
             JOptionPane.showMessageDialog(null, "Please fill customer details and add products to cart!");
+            return;
+        }
+
+        // Email Validation
+        if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid customer email address!");
+            return;
+        }
+
+        // Mobile Number Validation
+        if (!mobile.matches("^\\d{10,15}$")) {
+            JOptionPane.showMessageDialog(null, "Customer mobile number must be digits only and 10-15 digits long!");
             return;
         }
 

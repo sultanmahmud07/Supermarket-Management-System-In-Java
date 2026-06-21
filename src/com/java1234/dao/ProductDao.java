@@ -10,11 +10,12 @@ import com.java1234.model.Product;
 public class ProductDao {
 
     public void save(Connection con, Product product) throws Exception {
-        String sql = "insert into product (name,category,price) values(?,?,?)";
+        String sql = "insert into product (name,category,price,image_path) values(?,?,?,?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, product.getName());
         pstmt.setString(2, product.getCategory());
         pstmt.setString(3, product.getPrice());
+        pstmt.setString(4, product.getImagePath());
         pstmt.executeUpdate();
     }
 
@@ -29,18 +30,20 @@ public class ProductDao {
             product.setName(rs.getString("name"));
             product.setCategory(rs.getString("category"));
             product.setPrice(rs.getString("price"));
+            product.setImagePath(rs.getString("image_path"));
             list.add(product);
         }
         return list;
     }
 
     public void update(Connection con, Product product) throws Exception {
-        String sql = "update product set name=?, category=?, price=? where id=?";
+        String sql = "update product set name=?, category=?, price=?, image_path=? where id=?";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1, product.getName());
         pstmt.setString(2, product.getCategory());
         pstmt.setString(3, product.getPrice());
-        pstmt.setInt(4, product.getId());
+        pstmt.setString(4, product.getImagePath());
+        pstmt.setInt(5, product.getId());
         pstmt.executeUpdate();
     }
 
@@ -63,6 +66,7 @@ public class ProductDao {
             product.setName(rs.getString("name"));
             product.setCategory(rs.getString("category"));
             product.setPrice(rs.getString("price"));
+            product.setImagePath(rs.getString("image_path"));
             list.add(product);
         }
         return list;

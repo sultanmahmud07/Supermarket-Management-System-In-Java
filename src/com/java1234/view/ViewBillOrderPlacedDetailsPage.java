@@ -66,6 +66,13 @@ public class ViewBillOrderPlacedDetailsPage extends JFrame {
         // Table
         tableModel = new DefaultTableModel(new Object[]{"ID", "Bill ID", "Name", "Email", "Mobile Number", "Date", "Total", "Created By"}, 0);
         billTable = new JTable(tableModel);
+        billTable.setRowHeight(30);
+        billTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        billTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+        billTable.getTableHeader().setBackground(new Color(16, 185, 129));
+        billTable.getTableHeader().setForeground(Color.WHITE);
+        billTable.setSelectionBackground(new Color(16, 185, 129, 80));
+        
         JScrollPane scrollPane = new JScrollPane(billTable);
         scrollPane.setBounds(20, 130, 940, 270);
         getContentPane().add(scrollPane);

@@ -53,6 +53,13 @@ public class ManageCategoryPage extends JFrame {
         // Table
         tableModel = new DefaultTableModel(new Object[]{"ID", "Category Name"}, 0);
         categoryTable = new JTable(tableModel);
+        categoryTable.setRowHeight(30);
+        categoryTable.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        categoryTable.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
+        categoryTable.getTableHeader().setBackground(new Color(16, 185, 129));
+        categoryTable.getTableHeader().setForeground(Color.WHITE);
+        categoryTable.setSelectionBackground(new Color(16, 185, 129, 80));
+        
         JScrollPane scrollPane = new JScrollPane(categoryTable);
         scrollPane.setBounds(350, 90, 300, 220);
         getContentPane().add(scrollPane);
